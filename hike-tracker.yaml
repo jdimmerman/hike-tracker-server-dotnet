@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hike-tracker-server-dotnet
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hike-tracker-server-dotnet
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: hike-tracker-server-dotnet
+        aadpodidbinding: hike-tracker-ident-selector
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: hike-tracker-server-dotnet
+        image: hiketracker.azurecr.io/hike-tracker-server-dotnet:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: SAMPLE_ENV_VAR
+          value: "this is not used"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hike-tracker-server-dotnet
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: hike-tracker-server-dotnet

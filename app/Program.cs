@@ -18,6 +18,7 @@ namespace app
                 {
                     var builtConfig = config.Build();
                     var vaultUrl = $"https://{builtConfig["VaultName"]}.vault.azure.net/";
+                    Console.WriteLine($"vaultUrl {vaultUrl}");
                     var configBuilder = config.AddAzureKeyVault(vaultUrl);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

@@ -1,0 +1,8 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentity
+metadata:
+  name: hike-tracker-ident-name
+spec:
+  type: 0
+  ResourceID: /subscriptions/88864cea-e844-4fe2-8548-565e21988120/resourcegroups/Default-Networking/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hike-tracker-ident
+  ClientID: 3a6e1226-614d-467d-a19e-18135a86dcde

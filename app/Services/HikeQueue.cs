@@ -18,6 +18,7 @@ namespace app.Services
         private HikeQueue(string serviceBusConnectionString, string queueName)
         {
             _queueClient = new QueueClient(serviceBusConnectionString, queueName);
+            _queueClient.PrefetchCount = 10;
             RegisterOnMessageHandlerAndReceiveMessages();
         }
 
@@ -48,7 +49,7 @@ namespace app.Services
         {
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
-                MaxConcurrentCalls = 10,
+                MaxConcurrentCalls = 5,
                 AutoComplete = false,
             };
             _queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
