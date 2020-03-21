@@ -1,22 +1,25 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using app.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace app
 {
     public class Program
     {
-        private const string serviceBusConnectionString = "";
-        private const string queueName = "hike-tracker-queue";
-
         public static void Main(string[] args)
         {
-            HikeQueue.Initialize(serviceBusConnectionString, queueName);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+                {
+                    var builtConfig = config.Build();
+                    var vaultUrl = $"https://{builtConfig["VaultName"]}.vault.azure.net/";
+                    var configBuilder = config.AddAzureKeyVault(vaultUrl);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

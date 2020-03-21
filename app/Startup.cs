@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using app.Services;
 
 namespace app
 {
@@ -19,6 +20,7 @@ namespace app
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            HikeQueue.Initialize(Configuration["hike-tracker-queue-conn"], Configuration["QueueName"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
